@@ -1,17 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy as sp
 
 
 def linear_classify(x, theta, theta_0):
     """Uses the given theta, theta_0, to linearly classify the given data x. This is our hypothesis or hypothesis class.
 
-    :param x:
-    :param theta:
-    :param theta_0:
+    :param x: input data
+    :param theta: vector of norm
+    :param theta_0: offset
     :return: 1 if the given x is classified as positive, -1 if it is negative, and 0 if it lies on the hyperplane.
     """
     # Todo: Implement the linear classifier here that classifies x given theta, theta_0, and returns the result.
-    pass
+    return np.sign(theta.T @ x + theta_0)
 
 
 def Loss(prediction, actual):
@@ -22,7 +23,10 @@ def Loss(prediction, actual):
     :return:
     """
     # Todo: Implement the loss between a predicted and actual value here, and return the loss.
-    pass
+    if prediction == actual:
+        return 0
+    else:
+        return 1
 
 
 def E_n(h, data, labels, L, theta, theta_0):
@@ -38,8 +42,14 @@ def E_n(h, data, labels, L, theta, theta_0):
     """
     (d, n) = data.shape
     # Todo: Compute the training loss E_n here and return it.
-    pass
-
+    loss = 0
+    for i in range(n):
+        x = data[:, i-1]
+        y = labels[:, i-1]
+        y_hat = h(x,theta,theta_0)
+        err = L(y_hat,y)
+        loss = loss + err
+    return loss / n
 
 def random_linear_classifier(data, labels, params={}, hook=None):
     """
@@ -56,7 +66,21 @@ def random_linear_classifier(data, labels, params={}, hook=None):
     # Todo: Implement the Random Linear Classifier learning algorithm here.
     # Note: To call the hook function, use the following line inside your training loop:
     #   if hook: hook((theta, theta_0))
-    pass
+    lowest_loss = 1E100
+    best_theta = None
+    best_theta_0 = None
+
+    for i in range(k):
+        theta = np.random.uniform(-20,20,(d, 1))
+        theta_0 = np.random.uniform(-20,20)
+        loss = E_n(linear_classify,data,labels,Loss,theta,theta_0)
+        if loss < lowest_loss:
+            lowest_loss = loss
+            best_theta = theta
+            best_theta_0 = theta_0
+        if hook:
+            hook((theta, theta_0))
+    return (best_theta,best_theta_0)
 
 
 def perceptron(data, labels, params={}, hook=None):
@@ -72,7 +96,18 @@ def perceptron(data, labels, params={}, hook=None):
     (d, n) = data.shape
 
     # Todo: Implement the Perceptron algorithm here.
-    pass
+    theta = np.zeros(d)
+    theta_0 = 0
+    for t in range(T):
+        for i in range(n):
+            x = data[:, i-1]
+            y = labels[:, i-1]
+            if (y * (theta/T @ x + theta_0)).any() <= 0:
+                theta = theta + (y * x).flatten()
+                theta_0 = theta_0 + y
+        if hook:
+            hook((theta,theta_0))
+    return theta,theta_0
 
 
 def plot_separator(plot_axes, theta, theta_0):
@@ -139,6 +174,7 @@ if __name__ == '__main__':
     ax.set_title("Linear classification")
 
 
+
     # We'll define a hook function that we'll use to plot the separator at each step of the learning algorithm:
     def hook(params):
         (th, th0) = params
@@ -146,12 +182,12 @@ if __name__ == '__main__':
 
 
     # Run the RLC or Perceptron: (uncomment the following lines to call the learning algorithms)
-    # theta, theta_0 = random_linear_classifier(X, y, {"k": 100}, hook=None)
-    # theta, theta_0 = perceptron(X, y, {"T": 100}, hook=None)
+    theta, theta_0 = random_linear_classifier(X, y, {"k": 1000}, hook=None)
+    theta, theta_0 = perceptron(X, y, {"T": 100}, hook=None)
     # Plot the returned separator:
-    # plot_separator(ax, theta, theta_0)
+    plot_separator(ax, theta, theta_0)
 
     # Run the RLC, plot E_n over various k:
     # Todo: Your code
-
+    plt.show()
     print("Finished.")

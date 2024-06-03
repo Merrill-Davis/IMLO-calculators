@@ -11,23 +11,6 @@ theta input should be
 
 '''
 
-
-def DRAWHyperplane(theta, theta_zero):
-    # normal to hypeplane line is #y = mx + c
-    # or 0 = (theta_1 * x_1) + (theta_2 * x_2) + theta_zero
-
-    # where theta_2 part is effectively our Y value in y = mx+c
-    # theta_zero is the c, and theta_1 bit is our x
-    X_test = [np.linspace(-10, 10) * theta[0], np.linspace(-10, 10) * theta[1]]
-    hyperplane = [np.linspace(-10, 10) * theta[1], (np.linspace(-10, 10) * theta[0] * -1) + theta_zero]
-    plt.plot(X_test[0], X_test[1], color='blue', linestyle='--')
-    plt.axhline(0, linestyle='solid', color='black')
-    plt.axvline(0, linestyle='solid', color='black')
-    plt.axis('equal')
-    plt.plot(hyperplane[0], hyperplane[1], color='red', linestyle='solid')
-    plt.show()
-
-
 '''
 x is point on the hyperplane
 
@@ -115,7 +98,7 @@ print(test.getX2onHyperplane(0))
 print(test2.theta_zero)
 
 test3 = Hyperplane([1,-2],20)
-test3.drawHyperplane()
+#test3.drawHyperplane()
 
-test4 = Hyperplane([-1,-2],20)
-test4.drawHyperplane([100,20])
+test4 = Hyperplane([-1,-2],1.5)
+test4.drawHyperplane()
