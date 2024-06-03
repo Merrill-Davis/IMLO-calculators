@@ -50,19 +50,26 @@ class Hyperplane:
     def calcCfromgradientandPoint(self,grad,x):
         return x[1] - (grad[1] / grad[0] * x[0] )
     def getX2onHyperplane(self,X1):
-        return -1 * ((self.theta[0] * x) + self.theta_zero) / self.theta[1]
+        return -1 * ((self.theta[0] * X1) + self.theta_zero) / self.theta[1]
 
     def getX1onHyperplane(self,X2):
-        return self.hyperplaneform[0] * (X2 - self.theta_zero) / self.hyperplaneform[1]
-
-    def getX2onNormal(self,X1):
-        return self.theta[1] / self.theta[0] * X1
-    def getX1onNormal(self,X2):
-        return X2 * self.theta[0] / self.theta[1]
+        return -1 * ((self.theta[1] * X2) + self.theta_zero) / self.theta[0]
+        #return self.hyperplaneform[0] * (X2 - self.theta_zero) / self.hyperplaneform[1]
 
     def drawHyperplane(self,point=None):
-        normal = [np.linspace(-10, 10) * self.theta[0], np.linspace(-10, 10) * self.theta[1]]
-        hyperplane =  [np.linspace(-10, 10) * self.theta[1], (np.linspace(-10, 10) * self.theta[0] * -1) + self.theta_zero]
+
+        thetasumsquare = pow(self.theta[0], 2) + pow(self.theta[1], 2)
+        startx = min(0,-1 * self.theta_zero * self.theta[0] / thetasumsquare)
+        endx = max(self.theta[0],- 1 * self.theta_zero * self.theta[0] / thetasumsquare)
+
+        normal = [np.linspace(startx, endx),
+                  [i * self.theta[1] / self.theta[0]
+                   for i in np.linspace(startx, endx)]]
+
+        #print(f"minimum X: {startx}, endx = {endx}")
+
+        hyperplane = [np.linspace(-10, 10), [self.getX2onHyperplane(i) for i in np.linspace(-10, 10)]]
+
         plt.plot(normal[0], normal[1], color='blue', linestyle='--',label="normal")
         plt.axhline(0, linestyle='solid', color='black')
         plt.axvline(0, linestyle='solid', color='black')
@@ -75,25 +82,16 @@ class Hyperplane:
         plt.show()
 
 
-test = Hyperplane([1,2],-1.5)
+test = Hyperplane([1,2],1.5)
 print(test.hyperplaneform)
 #test.drawHyperplane()
 
-test2 = Hyperplane([1,2],theta_zero=None,x_hyperplane=[0,-1.5])
-print(test2.hyperplaneform)
-#test2.drawHyperplane()
+test2 = Hyperplane([1,2],theta_zero=None,x_hyperplane=[0,1.5])
 
-print("testing get X2")
-print(test.theta_zero)
-#print(test.getX2onHyperplane(10))
-print(test2.getX2onHyperplane(10))
-#test2.drawHyperplane()
-#test2.drawHyperplane([10,test2.getX2onHyperplane(10)])
-print("checking getX1")
-print(test2.getX1onHyperplane(-6.5))
+print(test.getX2onHyperplane(0))
+test.drawHyperplane()
+test.drawHyperplane([-0.3,-0.6])
 
-print("checking getXY on normal")
 
-print(test2.getX2onNormal(0))
-print(test2.getX1onNormal(0))
-test2.drawHyperplane([0,-0.75])
+print(test.getX1onHyperplane(-0.75))
+print(test.getX2onHyperplane(0))
