@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy as sp
+import itertools
 
 
 def linear_classify(x, theta, theta_0):
@@ -83,7 +84,7 @@ def random_linear_classifier(data, labels, params={}, hook=None):
     return (best_theta,best_theta_0)
 
 
-def perceptron(data, labels, params={}, hook=None):
+def perceptron_with_offset(data, labels, params={}, hook=None):
     """The Perceptron learning algorithm.
 
     :param data: A d x n matrix where d is the number of data dimensions and n the number of examples.
@@ -147,6 +148,18 @@ def plot_separator(plot_axes, theta, theta_0,points):
     # Note: The normal might not appear perpendicular on the plot if ax.axis('equal') is not set - but it is
     # perpendicular. Resize the plot window to equal axes to verify.
     plot_axes.arrow((xmin + xmax) / 2, (p1_y.flatten()[0] + p2_y.flatten()[0]) / 2, float(theta[0]), float(theta[1]))
+
+
+def transform_polynomial_basis(x, order):
+
+    if order == 0:
+        return [1]
+    else:
+        basis = transform_polynomial_basis(x, order-1)
+
+        for pair in itertools.product(*[x for _ in range(order)]):
+            basis.append(np.prod(pair))
+        return list(set(basis))
 
 
 if __name__ == '__main__':
