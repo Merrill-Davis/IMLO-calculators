@@ -95,6 +95,7 @@ def perceptron(data, labels, params={}, hook=None):
     T = params.get('T', 100)  # if T is not in params, default to 100
     (d, n) = data.shape
 
+
     # Todo: Implement the Perceptron algorithm here.
     theta = np.zeros(d)
     theta_0 = 0
@@ -102,11 +103,14 @@ def perceptron(data, labels, params={}, hook=None):
         for i in range(n):
             x = data[:, i:i+1]
             y = labels[:, i:i+1]
-            if y * (theta.T @ x + theta_0) <= 0:
+            if y * (theta.T @ x) <= 0:
+                print(f" theta = {theta} + ({y} * {x})")
                 theta = theta + (y * x).flatten()
-                theta_0 = theta_0 + y
+                print(f"theta is now {theta}")
+                #theta_0 = theta_0 + y
         if hook:
             hook((theta,theta_0))
+        print(f"number: {t+1} theta: {theta}")
     return theta,theta_0
 
 
@@ -164,6 +168,10 @@ if __name__ == '__main__':
                   [5, 2, 6, 5]])
     y = np.array([[1, -1, 1, -1]])
 
+    X = np.array([[2, 1, -1],
+                  [1, -2, 0]])
+    y = np.array([[1, -1, 1]])
+
     # To test your algorithm on a larger dataset, uncomment the following code. It generates uniformly distributed
     # random data in 2D, along with their labels.
     # X = np.random.uniform(low=-5, high=5, size=(2, 20))  # d=2, n=20
@@ -195,14 +203,15 @@ if __name__ == '__main__':
 
 
     # Run the RLC or Perceptron: (uncomment the following lines to call the learning algorithms)
-    theta, theta_0 = random_linear_classifier(X, y, {"k": 1000}, hook=None)
-    theta, theta_0 = perceptron(X, y, {"T": 1000}, hook=None)
+    # theta, theta_0 = random_linear_classifier(X, y, {"k": 1000}, hook=None)
+    theta, theta_0 = perceptron(X, y, {"T": 4}, hook=None)
     # Plot the returned separator:
-
+    # print(X.shape)
+    # print(X)
 
     # Change to add own theta in
 
-    #theta, theta_0 = [1,-2], 1.5
+    # theta, theta_0 = [2,0.001], -3
 
 
 

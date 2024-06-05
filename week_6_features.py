@@ -209,7 +209,7 @@ if __name__ == '__main__':
 
     # Run the RLC or Perceptron: (uncomment the following lines to call the learning algorithms)
     theta, theta_0 = random_linear_classifier(X, y, {"k": 1000}, hook=None)
-    theta, theta_0 = perceptron(X, y, {"T": 1000}, hook=None)
+    theta, theta_0 = perceptron_with_offset(X, y, {"T": 1000}, hook=None)
     # Plot the returned separator:
 
 

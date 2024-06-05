@@ -66,8 +66,8 @@ def data_linear_trivial():
     Y = np.array([[-6], [-4], [-2], [0], [2], [4], [6]])
     return X, Y
 def data_linear_mock():
-    X = np.array([[-1], [1], [2], [3]])
-    Y = np.array([[0], [-2], [-1], [1]])
+    X = np.array([[-1], [0], [1], [1]])
+    Y = np.array([[1], [3], [2],[4]])
     return X, Y
 
 
@@ -183,6 +183,7 @@ if __name__ == '__main__':
     # plot_line_2d(...)
     ax.plot(X, Y, '*')
     print(f"analytical OLS theta: {theta_star}")
+    #theta_star = np.array([[-2],[1]])
     plot_line_2d(axes=ax, theta=theta_star, line_style='g-')
     plt.show()
     # Exercise 2.3 - Solution using gradient descent:
@@ -223,7 +224,7 @@ if __name__ == '__main__':
     def step_size_fn(i):
         return 0.001  # Todo: Experiment with various step sizes
     # Now we're ready to run gradient descent to minimise f_ols:
-    last_x, fs, xs = gradient_descent(f_ols, df_ols, theta_init, step_size_fn=step_size_fn, max_iter=500)
+    last_x, fs, xs = gradient_descent(f_ols, df_ols, theta_init, step_size_fn=step_size_fn, max_iter=5000)
 
     # Todo: Plot the found hypothesis into the figure with the data.
     # Todo: Also plot individual steps of gradient descent, to see how the optimisation behaves.
@@ -239,6 +240,7 @@ if __name__ == '__main__':
     ax_ols.axvline(color='black', linewidth=0.5)
     ax_ols.set_title("Least squares regression with gradient descent ")
     ax_ols.plot(X, Y, '*')
+    print(f"gradient descent last theta = {last_x}")
     plot_line_2d(axes=ax_ols, theta=last_x, line_style='b-')
     plt.show()
     # Exercise 2.3 iii):
