@@ -180,7 +180,7 @@ if __name__ == '__main__':
     # ax.set_xlim(-20, 20)
     # ax.set_ylim(-20, 20)
     ax.set_xlim(min(X[0]) - 10,max(X[0]) + 20)
-    ax.set_xlim(min(X[1]) - 10, max(X[1]) + 20)
+    ax.set_ylim(min(X[1]) - 10, max(X[1]) + 20)
     ax.grid(True, which='both')
     ax.axhline(color='black', linewidth=0.5)
     ax.axvline(color='black', linewidth=0.5)
@@ -202,7 +202,7 @@ if __name__ == '__main__':
 
     # Change to add own theta in
 
-    #theta, theta_0 = [-3,-4],-5
+    #theta, theta_0 = [1,-2], 1.5
 
 
 
