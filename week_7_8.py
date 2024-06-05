@@ -65,6 +65,10 @@ def data_linear_trivial():
     X = np.array([[-6], [-4], [-2], [0], [2], [4], [6]])
     Y = np.array([[-6], [-4], [-2], [0], [2], [4], [6]])
     return X, Y
+def data_linear_mock():
+    X = np.array([[-1], [1], [2], [3]])
+    Y = np.array([[0], [-2], [-1], [1]])
+    return X, Y
 
 
 def data_linear_simple():
@@ -150,7 +154,9 @@ if __name__ == '__main__':
     # Exercise 2: Least Squares Regression
     # -----------
     # Get some example data (browse the file to see the various data_* functions provided):
-    X, Y = data_linear_offset()
+    #X, Y = data_linear_offset()
+    #X, Y = data_linear_simple()
+    X, Y = data_linear_mock()
 
 
     # Create a plot and set up some default plot options:
@@ -176,7 +182,7 @@ if __name__ == '__main__':
     # Todo: Plot the resulting hypothesis into the plot:
     # plot_line_2d(...)
     ax.plot(X, Y, '*')
-    print(theta_star)
+    print(f"analytical OLS theta: {theta_star}")
     plot_line_2d(axes=ax, theta=theta_star, line_style='g-')
     plt.show()
     # Exercise 2.3 - Solution using gradient descent:
@@ -293,4 +299,25 @@ if __name__ == '__main__':
     plt.show()
     print(f"Mean Squared Error for poly stuff: {ols_objective(X_augmented,Y,last_x)}")
     print(f"theta for poly stuff : {last_x}")
-    print("Finished.")
+    print("Finished graphs.")
+
+    print("gradient contribution shit")
+
+
+    def data_linear_mock2():
+        X = np.array([[-1], [1], [2], [3]])
+        Y = np.array([[0], [-2], [-1], [1]])
+        return X, Y
+
+    theta_exam = np.array([0.5])
+    theta_0_exam = -1
+    X, Y = data_linear_mock2()
+
+    def single_point_gradient(theta,theta_0,x,y):
+        #print(f"x: {x}, y: {y}")
+        #print((y - (theta.T @ x + theta_0)))
+        return -2 * x @ (y - (theta.T @ x + theta_0)), -2 * (y - (theta.T @ x + theta_0))
+
+    print(single_point_gradient(theta_exam,theta_0_exam,X[0],Y[0]))
+    for i in range(len(X)):
+        print(f"point X: {X[i]} Y: {Y[i]} , gradient contribution: {single_point_gradient(theta_exam,theta_0_exam,X[i],Y[i])}")
